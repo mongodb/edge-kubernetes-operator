@@ -1,0 +1,104 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "edge-operator.fullname" . }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: {{ if eq (.Values.watchNamespace | default "") "*" }} ClusterRole {{ else }} Role {{ end }}
+metadata:
+  name: {{ include "edge-operator.fullname" . }}
+  {{- if not (eq (.Values.watchNamespace | default "*") "*") }}
+  namespace: {{ .Values.watchNamespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+rules:
+- apiGroups:
+  - apps
+  resources:
+  - statefulsets
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - statefulsets/status
+  verbs:
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - edge.cloud.mongodb.com
+  resources:
+  - edgeservers
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - edge.cloud.mongodb.com
+  resources:
+  - edgeservers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - edge.cloud.mongodb.com
+  resources:
+  - edgeservers/status
+  verbs:
+  - get
+  - update
+- apiGroups:
+  - mongodbcommunity.mongodb.com
+  resources:
+  - mongodbcommunity
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+
+---
+kind: {{ if eq (.Values.watchNamespace | default "") "*" }} ClusterRoleBinding {{ else }} RoleBinding {{ end }}
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "edge-operator.fullname" . }}
+  {{- if ne (.Values.watchNamespace | default "*") "*" }}
+  namespace: {{ .Values.watchNamespace }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "edge-operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: {{ if eq (.Values.watchNamespace | default "") "*" }} ClusterRole {{ else }} Role {{ end }}
+  name: {{ include "edge-operator.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
