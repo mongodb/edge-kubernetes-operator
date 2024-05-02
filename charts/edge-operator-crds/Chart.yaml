@@ -1,0 +1,19 @@
+apiVersion: v2
+name: edge-operator-crds
+description: MongoDB Atlas Edge Operator - CRDs
+type: application
+version: 0.23.10
+appVersion: "0.23.10"
+kubeVersion: '>=1.16-0'
+keywords:
+- mongodb
+- database
+- nosql
+- cloud
+- atlas
+- edge
+icon: https://mongodb-images-new.s3.eu-west-1.amazonaws.com/leaf-green-dark.png
+home: https://github.com/mongodb/edge-kubernetes-operator
+maintainers:
+- name: MongoDB
+  email: support@mongodb.com

@@ -1,0 +1,28 @@
+apiVersion: v2
+name: edge-operator
+description: MongoDB Atlas Edge Operator
+type: application
+version: 0.23.10
+appVersion: "0.23.10"
+kubeVersion: '>=1.16-0'
+keywords:
+- mongodb
+- database
+- nosql
+- cloud
+- atlas
+- edge
+icon: https://mongodb-images-new.s3.eu-west-1.amazonaws.com/leaf-green-dark.png
+home: https://github.com/mongodb/edge-kubernetes-operator
+maintainers:
+- name: MongoDB
+  email: support@mongodb.com
+dependencies:
+- name: edge-operator-crds
+  version: 0.23.10
+  repository: https://mongodb.github.io/edge-kubernetes-operator
+  condition: edge-operator-crds.enabled
+- name: community-operator
+  version: 0.9.0
+  repository: https://mongodb.github.io/helm-charts
+  condition: community-operator.enabled
