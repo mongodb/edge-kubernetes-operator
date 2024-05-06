@@ -6,7 +6,7 @@ Edge Server is currently in __Public Preview__.
 
 The Edge Server is packaged in Docker containers, so deploying it can be done using either __docker compose__ or __kubernetes__.
 
-For deploying on __kubernetes__, we supply an [operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) which includes Custom Resource Definitions and a Controller to make it easy to run the Edge Server in your own cluster with minimal setup. The Edge Server also uses a MongoDB container for its internal storage, which is managed by the official [MongoDB Kubernetes Operator](https://github.com/mongodb/mongodb-enterprise-kubernetes).
+For deploying on __kubernetes__, we supply an [operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) which includes Custom Resource Definitions and a Controller to make it easy to run the Edge Server in your own cluster with minimal setup. The Edge Server also uses a MongoDB container for its internal storage, which is managed by the official [MongoDB Kubernetes Operator](https://github.com/mongodb/mongodb-kubernetes-operator).
 
 For testing or development, we recommend using [minikube](https://minikube.sigs.k8s.io/docs/start/) or [k3s](https://k3s.io/).
 
@@ -16,19 +16,20 @@ The below requires that you have created an Atlas Cluster with a linked Edge Ser
 
 To install the Edge Server in your kubernetes cluster, follow these steps:
 
-1. **Add the MongoDB Helm repo and install the Community Operator**
+1. **Add the MongoDB Edge Helm repo and install the Edge Operator**
+```sh
+helm repo add mongodb-atlas http://mongodb.github.io/edge-kubernetes-operator
+helm upgrade --install edge-operator mongodb-atlas/edge-operator
+```
+
+Alternatively, manually install the MongoDB Community Operator and the Edge Operator deployment
 ```sh
 helm repo add mongodb http://mongodb.github.io/helm-charts
 helm upgrade --install community-operator mongodb/community-operator --set mongodb.name=mongodb-enterprise-server --set mongodb.repo=quay.io/mongodb
-```
-
-3. **Fetch the resource file for the Edge Server Operator and `kubectl apply` it.**
-
-```sh
 curl "https://raw.githubusercontent.com/mongodb/edge-kubernetes-operator/main/release.yaml" | kubectl apply -f -
 ```
 
-4. **Install `edgectl`.**
+2. **Install `edgectl`.**
 
 `edgectl` is a command line tool for generating and managing configurations for Edge Server deployments. It can be used to generate a kubernetes resource file to provision a Pod, configured for your app, that will run the edge server in your cluster
 
@@ -38,7 +39,7 @@ To install `edgectl`, run
 curl https://services.cloud.mongodb.com/edge/install.sh | bash -s
 ```
 
-5. **Generate a configuration for your edge server**
+3. **Generate a configuration for your edge server**
 
 ```sh
 edgectl init --platform kubernetes --app-id <MY-APPLICATION-ID>
@@ -46,7 +47,7 @@ edgectl init --platform kubernetes --app-id <MY-APPLICATION-ID>
 
 This will prompt you for a registration token, which is provided from the UI when creating a new edge server. It will generate a YML file and print its path.
 
-6. **Use `kubectl` to apply the configuration to the cluster**
+4. **Use `kubectl` to apply the configuration to the cluster**
 
 Use the path produced from the previous step to `kubectl apply`, for example:
 ```sh
@@ -58,7 +59,7 @@ This should be all you need! Use `kubectl get pods` to monitor the deployment. A
 ```
 $ kubectl get pods
 NAME                                                              READY   STATUS    RESTARTS      AGE
-mongodb-atlas-edge-operator-controller-manager-565b79476d-4t248   2/2     Running   0             11m
+edge-operator-edge-operator-565b79476d-4t248                      2/2     Running   0             11m
 mongodb-kubernetes-operator-f6f956684-rbtz4                       1/1     Running   0             62m
 stores-NY-42-0                                                    2/2     Running   0             58m
 stores-NY-42-backing-db-0                                         2/2     Running   0             58m
