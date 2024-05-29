@@ -2,8 +2,8 @@ apiVersion: v2
 name: edge-operator
 description: MongoDB Atlas Edge Operator
 type: application
-version: 0.23.10
-appVersion: "0.23.10"
+version: 0.26.1
+appVersion: "0.26.1"
 kubeVersion: '>=1.16-0'
 keywords:
 - mongodb
@@ -19,7 +19,7 @@ maintainers:
   email: support@mongodb.com
 dependencies:
 - name: edge-operator-crds
-  version: 0.23.10
+  version: 0.26.1
   repository: https://mongodb.github.io/edge-kubernetes-operator
   condition: edge-operator-crds.enabled
 - name: community-operator
