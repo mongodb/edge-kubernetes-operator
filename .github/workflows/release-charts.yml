@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -14,8 +15,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Configure Git
         run: |
@@ -27,9 +26,27 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.6.0
+      - name: Publish edge-operator-crds
+        uses: mongodb/helm-charts/.github/actions/releaser@2a339bb594fb3d459d4052cd7c753234b095edc3
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
-          skip_existing: true
+          charts_repo_url: https://mongodb.github.io/edge-kubernetes-operator
+          target: edge-operator-crds
+          dryrun: ${{ github.ref_name != 'main' }}
+          work_dir: ${{ github.workspace }}
+          mark_latest: true
+
+      - name: Get latest charts from repo
+        run: helm repo update
+
+      - name: Publish edge-operator
+        uses: mongodb/helm-charts/.github/actions/releaser@2a339bb594fb3d459d4052cd7c753234b095edc3
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          charts_repo_url: https://mongodb.github.io/edge-kubernetes-operator
+          target: edge-operator
+          dryrun: ${{ github.ref_name != 'main' }}
+          work_dir: ${{ github.workspace }}
+          mark_latest: true
