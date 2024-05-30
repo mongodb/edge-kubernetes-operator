@@ -35,6 +35,29 @@ entries:
     version: 0.23.10
   edge-operator-crds:
   - apiVersion: v2
+    appVersion: 0.26.1
+    created: "2024-05-30T14:52:18.024360041Z"
+    description: MongoDB Atlas Edge Operator - CRDs
+    digest: 65a4e1cb4b1eb60e72ef557dac808e535dbd254c901ad0deb3449f683039296f
+    home: https://github.com/mongodb/edge-kubernetes-operator
+    icon: https://mongodb-images-new.s3.eu-west-1.amazonaws.com/leaf-green-dark.png
+    keywords:
+    - mongodb
+    - database
+    - nosql
+    - cloud
+    - atlas
+    - edge
+    kubeVersion: '>=1.16-0'
+    maintainers:
+    - email: support@mongodb.com
+      name: MongoDB
+    name: edge-operator-crds
+    type: application
+    urls:
+    - https://github.com/mongodb/edge-kubernetes-operator/releases/download/edge-operator-crds-0.26.1/edge-operator-crds-0.26.1.tgz
+    version: 0.26.1
+  - apiVersion: v2
     appVersion: 0.23.10
     created: "2024-05-03T00:41:10.747165+02:00"
     description: MongoDB Atlas Edge Operator - CRDs
@@ -57,4 +80,4 @@ entries:
     urls:
     - edge-operator-crds-0.23.10.tgz
     version: 0.23.10
-generated: "2024-05-03T00:41:10.744324+02:00"
+generated: "2024-05-30T14:52:18.024374639Z"
