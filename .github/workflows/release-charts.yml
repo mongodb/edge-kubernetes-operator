@@ -26,6 +26,11 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
+      - name: Add Helm repos
+        run: |
+          helm repo add mongodb https://mongodb.github.io/helm-charts
+          helm repo add edge https://mongodb.github.io/edge-kubernetes-operator
+
       - name: Publish edge-operator-crds
         uses: mongodb/helm-charts/.github/actions/releaser@2a339bb594fb3d459d4052cd7c753234b095edc3
         env:
@@ -33,7 +38,7 @@ jobs:
         with:
           charts_repo_url: https://mongodb.github.io/edge-kubernetes-operator
           target: edge-operator-crds
-          dryrun: ${{ github.ref_name != 'main' }}
+          #dryrun: ${{ github.ref_name != 'main' }}
           work_dir: ${{ github.workspace }}
           mark_latest: true
 
@@ -47,6 +52,6 @@ jobs:
         with:
           charts_repo_url: https://mongodb.github.io/edge-kubernetes-operator
           target: edge-operator
-          dryrun: ${{ github.ref_name != 'main' }}
+          #dryrun: ${{ github.ref_name != 'main' }}
           work_dir: ${{ github.workspace }}
           mark_latest: true
